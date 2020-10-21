@@ -52,8 +52,8 @@ function OrphanageMaps() {
                             icon={mapIcon}
                             position={[orphanage.latitude, orphanage.longitude]} >
                             <Popup closeButton={false} minWidth={240} maxWidth={240} className="map-popup">
-                                Lar das meninas
-                                <Link to='/orphanages/${orphanage.id}' >
+                                {orphanage.name}
+                                <Link to={"orphanages/"+orphanage.id} >
                                     <FiArrowRight size={20} color="#FFF" />
                                 </Link>
                             </Popup>
