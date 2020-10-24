@@ -6,10 +6,13 @@ import { LeafletMouseEvent } from "leaflet"
 import '../styles/pages/create-orphanage.css';
 import Sidebar from "../components/Sidebar";
 import mapIcon from "../utils/mapIcons";
+import api from "../service/api";
+import { useHistory } from "react-router-dom";
 
 
 
 export default function CreateOrphanage() {
+  const history = useHistory()
 
   const [name, setName] = useState('')
   const [about, setAbout] = useState('')
@@ -37,13 +40,27 @@ export default function CreateOrphanage() {
     setPreviewImages(selectImagesPreview)
   }
 
-  function handleSubmit(event: FormEvent) {
+  async function handleSubmit(event: FormEvent) {
     event.preventDefault()
     const { latitude, longitude } = position
+    
+    const data = new FormData()
+    data.append('latitude', String(latitude))
+    data.append('longitude', String(longitude))
+    data.append('name', name)
+    data.append('about', about)
+    data.append('instructions', instructions)
+    data.append('opening_hours', opening_hours)
+    data.append('open_on_weekends', String(open_on_weekends))
+    images.forEach(image => {
+      data.append('images', image)
+    })
 
-    console.log(
-      latitude, longitude, name, about, instructions, opening_hours, open_on_weekends
-    )
+    await api.post('orphanages', data)
+
+    alert('Cadastro realizado com sucesso!')
+
+    history.push('/app')
   }
 
   return (
@@ -55,7 +72,7 @@ export default function CreateOrphanage() {
             <legend>Dados</legend>
 
             <Map
-              center={[-27.2092052, -49.6401092]}
+              center={[-3.6791855, -40.3599327]}
               style={{ width: '100%', height: 280 }}
               zoom={15}
               onClick={handleMapClick}
